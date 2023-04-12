@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Copy Browser Device Info</title>
+		<link rel="stylesheet" href="./style.css">
+		<style>
+
+			body {
+				background: #fafafa;
+				text-align: center;
+			}
+
+			h1, p {
+				font-family: Helvetica, sans-serif;	
+			}
+
+			p {
+				color: black;
+				font-size: 12px;
+			}
+
+			#copied-text {
+				opacity: 0;
+				transition: all 0.2s ease;
+				color: blueviolet;
+			}
+
+			#copy-area {
+				cursor:  pointer;
+			}
+
+			textarea {
+				padding: 9px 7px;
+				font-family: Helvetica, sans-serif;
+				background: none;
+				border: none;
+				resize: none;
+				width: 368px;
+				box-shadow: 0px 4px 58px -36px rgba(0, 0, 0, 0.5);
+				border: 4px solid yellowgreen;
+				height: 17px;
+				text-align: center;
+				cursor: pointer;
+				pointer-events: none;
+			}	
+
+			
+
+			textarea:hover, 
+			input:hover, 
+			textarea:active, 
+			input:active, 
+			textarea:focus, 
+			input:focus,
+			button:focus,
+			button:active,
+			button:hover,
+			label:focus,
+			.btn:active,
+			.btn.active
+			{
+					outline:0px !important;
+					-webkit-appearance:none;
+					box-shadow: none !important;
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+				<h1>Copy Device Browser Info</h1>
+				<div id="copy-area" onclick="copy(this);">
+					<textarea name="" id="copy" cols="30" rows="10"></textarea>
+					<p>Click to copy</p>
+				</div>
+				<p id="copied-text">Copied text!</p>
+		</main>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/UAParser.js/1.0.35/ua-parser.min.js"></script>
+	<script>
+		var data = UAParser();
+
+		document.getElementById('copy').value = `${data.browser.name || ''} ${data.browser.version || ''}, ${data.os.name || ''} ${data.os.version || ''}, ${data.device.model || ''} ${data.device.vendor || ''}`;
+
+		
+		document.getElementById('copy-area').addEventListener('click', function(e) {
+			console.log(e)
+			// stop click event default and bubbling
+			e.preventDefault();
+			e.stopPropagation();
+
+			// Get the text field
+			var copyText = document.getElementById("copy");
+
+			// Select the text field
+			copyText.select();
+			copyText.setSelectionRange(0, 99999); // For mobile devices
+
+			// Copy the text inside the text field
+			//navigator.clipboard.writeText(copyText.value);
+			document.execCommand('copy');
+
+			copyText.blur();
+			document.getElementById('copied-text').style.opacity = 1;
+
+			setTimeout(function(){
+				document.getElementById('copied-text').style.opacity = 0;
+			}, 600)
+		});
+	</script>
+	</body>
+</html>
